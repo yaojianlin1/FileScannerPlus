@@ -23,13 +23,13 @@ static bool ShouldSkipDirectory(const fs::path& path);
  * @param code 代码行数
  * @param note 注释行数，目前为测试版，note恒为0，code则为code+note;
  */
-void GetLinesOfFile(const fs::path& path,int& code,int& note){
+void GetLinesOfFile(const fs::path& path,int& code,int& note,int& empty){
     std::ifstream f(path);
     int res = 0;
     std::string line;
     while(std::getline(f,line)){
         if(line.empty()){
-            continue;
+            empty++;
         }else{
             res++;
         }

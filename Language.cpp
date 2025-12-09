@@ -9,6 +9,10 @@ void Language::addNotes(long note){
     this->lines_note += note;
 }
 
+void Language::addEmpty(long empty){
+    this->lines_empty += empty;
+}
+
 void Language::addFiles(){
     this->files++;
 }
@@ -28,6 +32,10 @@ long Language::getCodes() const{
 
 long Language::getNotes() const{
     return this->lines_note;
+}
+
+long Language::getEmpty() const{
+    return this->lines_empty;
 }
 
 long Language::getFiles() const{

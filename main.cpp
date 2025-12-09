@@ -29,19 +29,21 @@ int main(void){
         if(SetExt.find(extTmp) != SetExt.end()){
             if(extTmp == ".txt" && nameTmp == "CMakeLists.txt"){
                 Map["CMake"].addFiles();
-                int code,note;
-                GetLinesOfFile(item,code,note);
+                int code=0,note=0,empty=0;
+                GetLinesOfFile(item,code,note,empty);
                 Map["CMake"].addCodes(code);
                 Map["CMake"].addNotes(note);
+                Map["CMake"].addEmpty(empty);
             }else if(extTmp != ".txt"){
-                int code,note;
-                GetLinesOfFile(item,code,note);
+                int code=0,note=0,empty=0;
+                GetLinesOfFile(item,code,note,empty);
                 // cout<<"code:"<<code<<"\t"<<"note:"<<note<<endl;
                 for(auto& it:Map){
                     if(it.second.IsBelongTo(extTmp)){
                         it.second.addFiles();
                         it.second.addCodes(code);
                         it.second.addNotes(note);
+                        it.second.addEmpty(empty);
                     }
                 }
             }
@@ -50,7 +52,6 @@ int main(void){
     PrintAllInformation(Map);
     return 0;
 }
-
 /**
  * @brief 初始化Map
  * 
@@ -77,11 +78,11 @@ void MapInit(std::unordered_map<std::string,Language>& Map){
  * @param Map 
  */
 void PrintAllInformation(const std::unordered_map<std::string,Language>& Map){
-    cout<<"Language\t"<<"file\t"<<"code\t"<<"note\t"<<endl;
+    cout<<"Language\t"<<"file\t"<<"code\t"<<"note\t"<<"empty"<<endl;
     for(const auto& item:Map){
         if(item.second.getFiles() == 0){
             continue;
         }
-        cout<<item.second.getName()<<"\t\t"<<item.second.getFiles()<<"\t"<<item.second.getCodes()<<"\t"<<item.second.getNotes()<<endl;
+        cout<<item.second.getName()<<"\t\t"<<item.second.getFiles()<<"\t"<<item.second.getCodes()<<"\t"<<item.second.getNotes()<<"\t"<<item.second.getEmpty()<<endl;
     }
 }
