@@ -23,7 +23,7 @@ static bool ShouldSkipDirectory(const fs::path& path);
  * @param code 代码行数
  * @param note 注释行数，目前为测试版，note恒为0，code则为code+note;
  */
-void GetLinesOfFile(const fs::path& path,int code,int note){
+void GetLinesOfFile(const fs::path& path,int& code,int& note){
     std::ifstream f(path);
     int res = 0;
     std::string line;
@@ -42,7 +42,7 @@ void GetLinesOfFile(const fs::path& path,int code,int note){
  * @brief Get the All Files object
  * 
  * @param path 目录的路径
- * @return std::vector<fs::path> 
+ * @return std::vector<fs::path> 所有的文件的路径
  */
 std::vector<fs::path> GetAllFiles(const fs::path& path){
     if(!fs::exists(path)){

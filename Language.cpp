@@ -1,4 +1,5 @@
 #include "Language.h"
+#include <vector>
 
 void Language::addCodes(long code){
     this->lines_code += code;
@@ -12,18 +13,31 @@ void Language::addFiles(){
     this->files++;
 }
 
-long Language::getCodes(){
+void Language::setExtensionSet(const std::vector<std::string> exs){
+    for(const auto item:exs){
+        this->ExtensionSet.insert(item);
+    }
+}
+void Language::setExtensionSet(const std::string ext){
+    this->ExtensionSet.insert(ext);
+}
+
+long Language::getCodes() const{
     return this->lines_code;
 }
 
-long Language::getNotes(){
+long Language::getNotes() const{
     return this->lines_note;
 }
 
-long Language::getFiles(){
+long Language::getFiles() const{
     return this->files;
 }
 
-std::string Language::getName(){
+std::string Language::getName() const{
     return this->name_;
+}
+
+bool Language::IsBelongTo(std::string& extension){
+    return this->ExtensionSet.find(extension) != this->ExtensionSet.end();
 }

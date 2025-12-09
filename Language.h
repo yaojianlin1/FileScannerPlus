@@ -1,23 +1,43 @@
 #pragma once
 #include <string>
+#include <unordered_set>
+#include <vector>
 class Language{
 private:
     std::string name_;
     long lines_code;
     long lines_note;
     int files;
+    
+    std::unordered_set<std::string> ExtensionSet;
 public:
-    Language(const std::string& name):name_(name),lines_code(0),lines_note(0),files(0){}
-
+    Language() = default;
+    Language(const std::string& name):name_(name),lines_code(0),lines_note(0),files(0),ExtensionSet({}){}
+    Language(const Language& other):name_(other.name_),lines_code(other.lines_code),lines_note(other.lines_note),files(other.files),ExtensionSet(other.ExtensionSet){}
+    Language& operator=(const Language& other){
+        if(this != &other){
+            this->name_ = other.name_;
+            this->lines_code = other.lines_code;
+            this->lines_note = other.lines_note;
+            this->files = other.files;
+            this->ExtensionSet = other.ExtensionSet;
+        }
+        return *this;
+    }
+    ~Language() = default;
 
 public:
     
     void addCodes(long code);
     void addNotes(long note);
     void addFiles();
+    void setExtensionSet(const std::vector<std::string> exs);
+    void setExtensionSet(const std::string ext);
 
-    long getCodes();
-    long getNotes();
-    long getFiles();
-    std::string getName();
+    long getCodes() const;
+    long getNotes() const;
+    long getFiles() const;
+    std::string getName() const;
+
+    bool IsBelongTo(std::string& extension);
 };
