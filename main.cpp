@@ -1,3 +1,13 @@
+/**
+ * @file main.cpp
+ * @author yao
+ * @brief 
+ * @version 0.5
+ * @date 2025-12-09
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
 #include <iostream>
 #include <filesystem>
 #include <vector>
@@ -19,6 +29,7 @@ int main(void){
     std::vector<fs::path> ListFiles;
     std::unordered_map<std::string,Language> Map;
     MapInit(Map);
+    setInit();
     fs::path cur = fs::current_path();
     // cout<<"cur = "<<cur<<endl;
     ListFiles = GetAllFiles(cur);
@@ -30,16 +41,15 @@ int main(void){
             if(extTmp == ".txt" && nameTmp == "CMakeLists.txt"){
                 Map["CMake"].addFiles();
                 int code=0,note=0,empty=0;
-                GetLinesOfFile(item,code,note,empty);
+                GetLinesOfFile(item,code,note,empty,(std::string)"CMake");
                 Map["CMake"].addCodes(code);
                 Map["CMake"].addNotes(note);
                 Map["CMake"].addEmpty(empty);
             }else if(extTmp != ".txt"){
                 int code=0,note=0,empty=0;
-                GetLinesOfFile(item,code,note,empty);
-                // cout<<"code:"<<code<<"\t"<<"note:"<<note<<endl;
                 for(auto& it:Map){
                     if(it.second.IsBelongTo(extTmp)){
+                        GetLinesOfFile(item,code,note,empty,it.second.getName());
                         it.second.addFiles();
                         it.second.addCodes(code);
                         it.second.addNotes(note);
