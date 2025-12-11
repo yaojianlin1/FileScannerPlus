@@ -27,7 +27,7 @@ std::unordered_set<std::string> setFunc = {"Haskell"};
  * 
  */
 const std::unordered_map<std::string,std::string> map_ext_program = {
-    {".c","c_cpp"},{".cpp","c_cpp"},{".h","c_cpp"},{".hpp","c_cpp"},{".C","c_cpp"},
+    {".c","c_cpp"},{".cpp","c_cpp"},{".h","c_cpp"},{".hpp","c_cpp"},{".C","c_cpp"},{".cxx","c_cpp"},
     {".java","java"},{".JAVA","java"},
     {".js","JavaScript"},
     {".ts","TypeScript"},
