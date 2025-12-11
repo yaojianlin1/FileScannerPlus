@@ -1,34 +1,48 @@
+/********
+ * 
+ */
+
 #include <filesystem>
 #include <iostream>
 #include <vector>
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 #include <fstream>
+#include <map>
 #include "util.h"
 std::unordered_set<std::string> set_skip_dir = {
     "build","obj","bin"
 };
 namespace fs = std::filesystem;
 std::vector<fs::path> files;
-std::unordered_set<std::string> setC,setScript,setMark,setFunc;
+
+
+std::unordered_set<std::string> setC = {"c_cpp","java","JavaScript","TypeScript"};
+std::unordered_set<std::string> setScript = {"python"};
+std::unordered_set<std::string> setMark = {"HTML"};
+std::unordered_set<std::string> setFunc = {"Haskell"};
+/**
+ * @brief 这是一个从文件扩展名到编程语言名称的映射，由于在使用该映射时，已经判断了它的确是program，所以.txt对应的就是cmake
+ * 
+ */
+const std::unordered_map<std::string,std::string> map_ext_program = {
+    {".c","c_cpp"},{".cpp","c_cpp"},{".h","c_cpp"},{".hpp","c_cpp"},{".C","c_cpp"},
+    {".java","java"},{".JAVA","java"},
+    {".js","JavaScript"},
+    {".ts","TypeScript"},
+    {".py","python"},
+    {".html","HTML"},
+    {".txt","CMake"},
+};
 
 
 static bool ShouldSkipDirectory(const fs::path& path);
 
-static void ParserC(const fs::path& path,int& code,int& note,int& empty);
-static void ParserPy(const fs::path& path,int& code,int& note,int& empty);
 
-static void eraseSpaceFront(std::string& str);
-
+//TODO: 先空着，后续给该函数删了
 void setInit(){
-    //C, C++, C#, Java, JavaScript, TypeScript, Swift, Rust, Go, PHP
-    setC = {"c_cpp","java","JavaScript","TypeScript"};
-    //Python, Ruby, Bash, PowerShell, Perl, YAML, Makefile
-    setScript = {"python"};
-    //HTML, XML, Markdown, LaTeX, INI, TOML
-    setMark = {"HTML"};
-    //Haskell, OCaml, F#, Erlang, Elixir, Lisp, Scheme
-    setFunc = {"Haskell"};
+    
 }
 
 /**
@@ -55,8 +69,15 @@ void GetLinesOfFile(const fs::path& path,int& code,int& note,int& empty,const st
     // code = res;
     // note = 0;
 }   
-
-static void ParserC(const fs::path& path,int& code,int& note,int& empty){
+/**
+ * @brief 处理C语言，获取它的信息
+ * 
+ * @param path 
+ * @param code 
+ * @param note 
+ * @param empty 
+ */
+void ParserC(const fs::path& path,int& code,int& note,int& empty){
     std::ifstream f(path);
     int code_tmp = 0,note_tmp=0,empty_tmp=0;
     std::string line;
@@ -91,7 +112,7 @@ static void ParserC(const fs::path& path,int& code,int& note,int& empty){
     note = note_tmp;
     empty = empty_tmp;
 }
-static void ParserPy(const fs::path& path,int& code,int& note,int& empty){
+void ParserPy(const fs::path& path,int& code,int& note,int& empty){
     std::ifstream f(path);
     int code_tmp = 0,note_tmp = 0,empty_tmp = 0;
     std::string line;
@@ -134,7 +155,7 @@ static void ParserPy(const fs::path& path,int& code,int& note,int& empty){
  * 
  * @param str 
  */
-static void eraseSpaceFront(std::string& str){
+void eraseSpaceFront(std::string& str){
     str.erase(0,str.find_first_not_of(" "));
 }
 
