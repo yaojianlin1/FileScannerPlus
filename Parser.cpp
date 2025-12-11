@@ -4,7 +4,7 @@
 namespace fs = std::filesystem;
 
 static std::unordered_set<std::string> SetExt = {
-    ".java",".JAVA",".py",".PY",".c",".cpp",".C",".cxx",".h",".hpp",".m",".js",".ts",".xml",".json",".txt"
+    ".java",".JAVA",".py",".c",".cpp",".C",".cxx",".h",".hpp",".m",".js",".ts",".xml",".json",".txt"
 };
 
 /*==============================================================================================================*/
@@ -22,6 +22,7 @@ void Parser::IsProgram(){
         }
     }
 }
+
 void Parser::Infor(){
     this->IsProgram();
     if(!this->file.Getis_program()){
@@ -45,20 +46,29 @@ void Parser::Infor(){
     this->file.__setlines_code(code);
     this->file.__setlines_note(note);
     this->file.__setlines_empty(empty);
-    this->file.__setrate_note((double)(note/(code+note)));
+    if(code+note==0){
+        this->file.__setrate_note(0);
+    }else{
+        this->file.__setrate_note((double)(note/(code+note)));
+    }
+    
 }
 
 /*===============================================================================================================*/
 
 void Parser::ParserC(int& code,int& note,int& empty){
-    ParserC(code,note,empty);
+    ParserCC(this->file.Getpath(),code,note,empty);
 }
 void Parser::ParserPy(int& code,int& note,int& empty){
-    ParserPy(code,note,empty);
+    ParserPyPy(this->file.Getpath(),code,note,empty);
 }
 
 /*===============================================================================================================*/
 
+/**
+ * @brief 获取所有信息，执行一次即可。
+ * 
+ */
 void Parser::ParseAll(){
     this->Infor();
 }

@@ -18,8 +18,7 @@ namespace fs = std::filesystem;
  */
 class Parser{
 private:
-    FileInformation file;
-
+    
     void IsProgram();
     void Infor();
 
@@ -28,6 +27,7 @@ private:
 
 
 public:
+    FileInformation file;
     Parser(fs::path p){
         //这里的p是单个文件的路径
         file.__setis_program(false);

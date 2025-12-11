@@ -13,7 +13,7 @@ void Language::addEmpty(long empty){
     this->lines_empty += empty;
 }
 
-void Language::addFiles(){
+void Language::addFile(){
     this->files++;
 }
 

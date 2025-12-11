@@ -17,6 +17,8 @@ std::unordered_set<std::string> set_skip_dir = {
 namespace fs = std::filesystem;
 std::vector<fs::path> files;
 
+//所有编程语言名字的集合,cmake不要忘记，它不在下面这几个set家族里,这个数组并不使用，只是给开发者看的。
+const std::vector<std::string> NamesAllProgram = {"c_cpp","java","JavaScript","TypeScript","python","HTML","Haskell","CMake"};
 
 std::unordered_set<std::string> setC = {"c_cpp","java","JavaScript","TypeScript"};
 std::unordered_set<std::string> setScript = {"python"};
@@ -55,9 +57,9 @@ void setInit(){
 void GetLinesOfFile(const fs::path& path,int& code,int& note,int& empty,const std::string& language){
     if(setC.find(language) != setC.end()){
         //证明是C语言风格的语言
-        ParserC(path,code,note,empty);
+        ParserCC(path,code,note,empty);
     }else if(setScript.find(language) != setScript.end()){
-        ParserPy(path,code,note,empty);
+        ParserPyPy(path,code,note,empty);
     }
     // while(std::getline(f,line)){
     //     if(line.empty()){
@@ -77,7 +79,7 @@ void GetLinesOfFile(const fs::path& path,int& code,int& note,int& empty,const st
  * @param note 
  * @param empty 
  */
-void ParserC(const fs::path& path,int& code,int& note,int& empty){
+void ParserCC(const fs::path& path,int& code,int& note,int& empty){
     std::ifstream f(path);
     int code_tmp = 0,note_tmp=0,empty_tmp=0;
     std::string line;
@@ -112,7 +114,7 @@ void ParserC(const fs::path& path,int& code,int& note,int& empty){
     note = note_tmp;
     empty = empty_tmp;
 }
-void ParserPy(const fs::path& path,int& code,int& note,int& empty){
+void ParserPyPy(const fs::path& path,int& code,int& note,int& empty){
     std::ifstream f(path);
     int code_tmp = 0,note_tmp = 0,empty_tmp = 0;
     std::string line;

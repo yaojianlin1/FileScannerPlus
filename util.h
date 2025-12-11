@@ -26,6 +26,6 @@ std::vector<fs::path> GetAllFiles(const fs::path& path);
 void GetLinesOfFile(const fs::path& path,int& code,int& note,int& empty,const std::string& language);
 
 
-void ParserC(const fs::path& path,int& code,int& note,int& empty);
-void ParserPy(const fs::path& path,int& code,int& note,int& empty);
+void ParserCC(const fs::path& path,int& code,int& note,int& empty);
+void ParserPyPy(const fs::path& path,int& code,int& note,int& empty);
 void eraseSpaceFront(std::string& str);

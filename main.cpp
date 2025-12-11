@@ -13,75 +13,70 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
-
+#include <utility>
 #include "Language.h"
 #include "util.h"
 #include "main.h"
+#include "Parser.h"
+#include "Language.h"
 using std::string;
 using std::vector;
 namespace fs = std::filesystem;
 using std::cout,std::endl;
 
-std::unordered_set<std::string> SetExt = {
-    ".java",".JAVA",".py",".PY",".c",".cpp",".C",".cxx",".h",".hpp",".m",".js",".ts",".xml",".json",".txt"
-};
+// std::unordered_set<std::string> SetExt = {
+//     ".java",".JAVA",".py",".c",".cpp",".C",".cxx",".h",".hpp",".m",".js",".ts",".xml",".json",".txt"
+// };
+// std::unordered_set<std::string> las;//使用到了哪些编程语言，都放入这个哈希集合中
+std::unordered_map<std::string,Language> lans;//使用到了哪些语言，都放到这个map,key---编程语言的名字，value---Language类
+
 int main(void){
     std::vector<fs::path> ListFiles;
-    std::unordered_map<std::string,Language> Map;
-    MapInit(Map);
+    // std::unordered_map<std::string,Language> Map;
+    // MapInit(Map);
     setInit();
     fs::path cur = fs::current_path();
     // cout<<"cur = "<<cur<<endl;
     ListFiles = GetAllFiles(cur);
-    for(const auto& item:ListFiles){
-        std::string extTmp = item.filename().extension().string();
-        std::string nameTmp = item.filename().string();
-        // cout<<"extTmp:"<<extTmp<<"\t"<<"nameTmp:"<<nameTmp<<endl;
-        if(SetExt.find(extTmp) != SetExt.end()){
-            if(extTmp == ".txt" && nameTmp == "CMakeLists.txt"){
-                Map["CMake"].addFiles();
-                int code=0,note=0,empty=0;
-                GetLinesOfFile(item,code,note,empty,(std::string)"CMake");
-                Map["CMake"].addCodes(code);
-                Map["CMake"].addNotes(note);
-                Map["CMake"].addEmpty(empty);
-            }else if(extTmp != ".txt"){
-                int code=0,note=0,empty=0;
-                for(auto& it:Map){
-                    if(it.second.IsBelongTo(extTmp)){
-                        GetLinesOfFile(item,code,note,empty,it.second.getName());
-                        it.second.addFiles();
-                        it.second.addCodes(code);
-                        it.second.addNotes(note);
-                        it.second.addEmpty(empty);
-                    }
-                }
+    for(auto& p:ListFiles){
+        Parser tmp(p);
+        tmp.ParseAll();
+        if(tmp.file.Getis_program()){
+            std::string tmp_name = tmp.file.Getname_program();
+            if(lans.find(tmp_name) == lans.end()){
+                lans.emplace(tmp_name,Language(tmp_name));
             }
+            lans[tmp_name].addCodes(tmp.file.Getlines_code());
+            lans[tmp_name].addNotes(tmp.file.Getlines_note());
+            lans[tmp_name].addEmpty(tmp.file.Getlines_empty());
+            lans[tmp_name].addFile();
         }
     }
-    PrintAllInformation(Map);
+    PrintAllInformation(lans);
     return 0;
 }
+
+
 /**
  * @brief 初始化Map
  * 
- * @param Map ，键值分别为string,Language
+ * @param Map ，键值分别为string，这里的string为编程语言的名字,Language,这里的Language为自定义的类
  */
-void MapInit(std::unordered_map<std::string,Language>& Map){
-    vector<std::string> vecName = {"java","python","c_cpp","Matlab","JavaScript","TypeScript","Configuration","CMake"};
-    for(const auto& item:vecName){
-        // Map.insert(std::pair<std::string,Language>(item,Language(item)));
-        Map.insert(std::make_pair(item,Language(item)));
-    }
-    Map["java"].setExtensionSet(std::vector<std::string>{".java",".JAVA"});
-    Map["python"].setExtensionSet(std::vector<std::string>{".py",".PY"});
-    Map["c_cpp"].setExtensionSet(std::vector<std::string>{".c",".cpp",".C",".cxx",".h",".hpp"});
-    Map["Matlab"].setExtensionSet(".m");
-    Map["JavaScript"].setExtensionSet(".js");
-    Map["TypeScript"].setExtensionSet(".ts");
-    Map["Configuration"].setExtensionSet(std::vector<std::string>{".xml",".json"});
-    Map["CMake"].setExtensionSet(".txt");
-}
+// void MapInit(std::unordered_map<std::string,Language>& Map){
+//     vector<std::string> vecName = {"java","python","c_cpp","Matlab","JavaScript","TypeScript","Configuration","CMake"};
+//     for(const auto& item:vecName){
+//         // Map.insert(std::pair<std::string,Language>(item,Language(item)));
+//         Map.insert(std::make_pair(item,Language(item)));
+//     }
+//     Map["java"].setExtensionSet(std::vector<std::string>{".java",".JAVA"});
+//     Map["python"].setExtensionSet(std::vector<std::string>{".py",".PY"});
+//     Map["c_cpp"].setExtensionSet(std::vector<std::string>{".c",".cpp",".C",".cxx",".h",".hpp"});
+//     Map["Matlab"].setExtensionSet(".m");
+//     Map["JavaScript"].setExtensionSet(".js");
+//     Map["TypeScript"].setExtensionSet(".ts");
+//     Map["Configuration"].setExtensionSet(std::vector<std::string>{".xml",".json"});
+//     Map["CMake"].setExtensionSet(".txt");
+// }
 /**
  * @brief 打印输出所有信息
  * 

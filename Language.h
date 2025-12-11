@@ -33,7 +33,7 @@ public:
     void addCodes(long code);
     void addNotes(long note);
     void addEmpty(long empty);
-    void addFiles();
+    void addFile();
     void setExtensionSet(const std::vector<std::string> exs);
     void setExtensionSet(const std::string ext);
 
